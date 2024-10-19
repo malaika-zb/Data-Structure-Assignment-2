@@ -55,7 +55,12 @@ class Maze{
 
 int main()
 {
+Player player (1,1);
+
 int ch;
+int newX = player.getX();
+int newY = player.getY();
+
 switch (ch)
 {
 case 'w':
@@ -81,13 +86,6 @@ break;
 //exit the game
 case 'q':
 return 0;
-
-}
-
-
-
-
-
 }
 
 
