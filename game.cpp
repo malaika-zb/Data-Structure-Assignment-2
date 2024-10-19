@@ -55,6 +55,41 @@ class Maze{
 
 int main()
 {
+int ch;
+switch (ch)
+{
+case 'w':
+newY--;
+break;
+
+case 's':
+newY++;
+break;
+
+case 'a':
+newX--;
+break;
+
+case 'd':
+newX++;
+break;
+
+//for undo move 
+case 'z':
+break;
+
+//exit the game
+case 'q':
+return 0;
+
+}
+
+
+
+
+
+}
+
 
     return 0;
 }
