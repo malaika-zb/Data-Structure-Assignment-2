@@ -18,12 +18,14 @@ Node(char val): value(val), up(nullptr), down(nullptr), left(nullptr), right(nul
 
 class Player{
 private:
+//the x and y cooridates
 int x,y;
 public:
 //making the constructor
 Player(int startingx, int startingy): x(startingx) , y(startingy)
 {}
 
+//for moving the player
 void move(int newX, int newY)
 {
 x = newX;
@@ -32,30 +34,29 @@ y = newY;
 
 // getter and setter of this class 
 int getX() const {
-    return x;
+    return x;    //get x coordinate
 }
-int getY() const {
+int getY() const {  //get y coordinate 
     return y;
 }
 };
 
+
+//for undo i am making class stack
 class Stack{
 
 };
 
 
+//this will print the maze 
 class Maze{
-
-
-
-
 
 };
 
 
 int main()
 {
-Player player (1,1);
+Player player (1,1); //our player initialized with 1,1 position 
 
 int ch;
 int newX = player.getX();
@@ -64,19 +65,19 @@ int newY = player.getY();
 switch (ch)
 {
 case 'w':
-newY--;
+newY--;   //for moving up
 break;
 
 case 's':
-newY++;
+newY++;  //for down 
 break;
 
 case 'a':
-newX--;
+newX--;  //for left 
 break;
 
 case 'd':
-newX++;
+newX++; //for right 
 break;
 
 //for undo move 
@@ -87,7 +88,6 @@ break;
 case 'q':
 return 0;
 }
-
 
     return 0;
 }
