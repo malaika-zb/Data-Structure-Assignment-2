@@ -23,6 +23,13 @@ public:
 //making the constructor
 Player(int startingx, int startingy): x(startingx) , y(startingy)
 {}
+
+void move(int newX, int newY)
+{
+x = newX;
+y = newY;
+}
+
 // getter and setter of this class 
 int getX() const {
     return x;
