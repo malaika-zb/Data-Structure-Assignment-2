@@ -17,9 +17,19 @@ Node(char val): value(val), up(nullptr), down(nullptr), left(nullptr), right(nul
 };  
 
 class Player{
-
-
-
+private:
+int x,y;
+public:
+//making the constructor
+Player(int startingx, int startingy): x(startingx) , y(startingy)
+{}
+// getter and setter of this class 
+int getX() const {
+    return x;
+}
+int getY() const {
+    return y;
+}
 };
 
 class Stack{
