@@ -313,8 +313,22 @@ void providekeyhint(Player& player)
     }
 }
 
+//so that player does not go beyond the boundary
+bool ismovevelid(int newX, int newY)
+{
+    if(newX<1 || newX >= colms-1 || newY<1 || newY>= rows-1)
+    {
+        return false;
+    }
+    return grid[newY][newX]->value!= '#';
+}
 
+//destructor
+ 
+for(int i=0; i<rows; i++)
+{
 
+}
 
 };
 
