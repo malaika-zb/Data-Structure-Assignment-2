@@ -44,6 +44,23 @@ int getY() const {  //get y coordinate
 
 //for undo i am making class stack
 class Stack{
+private:
+struct sNode
+{
+int x , y;
+sNode* down;
+
+//constructor
+sNode(int x, int y): x(x) , y(y), down(nullptr)
+{}
+};
+sNode* top;
+int size; 
+int limit;
+
+public:
+
+}
 
 };
 
@@ -58,8 +75,8 @@ int colms; //no of colms
 int keyX; //key at position X
 int keyY; //key at position Y
 bool hasKey; //if the player has founf key
-int doorX;  //door at position x 
-int doorY;  //door at position Y 
+int doorX= 10;  //door at position x 
+int doorY =10;  //door at position Y 
 
 public:
 //constructor 
@@ -122,7 +139,7 @@ grid [doorY][doorX]->value = ' ';   // the door is not visible to the player
 
 void placeCoins()  // placing coins at these positions 
 {
-   int coinpositions[10][2] =
+   int coinpositions[10][2] =  //coins will be used in scoring 
 { 
     {3,3} , {5,7} , {12,12} , {15,10} , {25,20} , {8,5} , {18,3} , {20,15} , {28,8} , {10,10}
 };
@@ -132,11 +149,11 @@ for (int i =0 ; i<10; i++)
   int rows = coinpositions[i][1];
   int colms = coinpositions[i][0];
 
-if (rows > 0 && rows <rows-1 && colms > 0 && colms < colms -1 )
+if (rows > 0 && rows <rows-1 && colms > 0 && colms < colms -1 ) //placing coins randomly through loops 
 {
-    if (grid[rows][colms]->value == '.')
+    if (grid[rows][colms]->value == '.')  
      {
-        grid[rows][colms]->value == 'C';
+        grid[rows][colms]->value == 'C';  //coins are represented by C 
      }
 }
 }
