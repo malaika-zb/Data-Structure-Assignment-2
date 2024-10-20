@@ -71,6 +71,8 @@ for(int i=0; i < rows; i++)
 grid[i]= new Node*[colms];
 for(int j=0; j<colms; j++)
 {
+
+    // if true than # will be printed leaving other places with .
 char cellvalue = (i== 0 || i== rows -1 || j==0 || j ==colms -1 )? '#': '.';
 grid[i][j] = new Node(cellvalue);
 }
@@ -80,27 +82,25 @@ for(int i= 0; i< rows; i++)
 {
 for (int j=0; j< rows ; j++)
 {
-
-if (i>0)
+//the grid is inter connected using the multi dim linked list 
+if (i>0) 
 {
-    grid[i][j]->up = grid [i-1[j]];
+    grid[i][j]->up = grid [i-1[j]]; // for up 
 }
 
 if (i < rows-1)
 {
-grid[i][j]->down = grid [i-1][j];
+grid[i][j]->down = grid [i-1][j]; //for down 
 }
 
 if (j>0)
 {
-grid[i][j]->left = grid [i][j-1];
+grid[i][j]->left = grid [i][j-1]; //for left
 }
 
 if (i < colms-1)
 {
-grid[i][j]->down = grid [i][j+1];
-}
-
+grid[i][j]->right = grid [i][j+1];   //for right 
 }
 }
 }
@@ -140,10 +140,12 @@ break;
 
 //for undo move 
 case 'z':
+stack.undomove(player);
 break;
 
 //exit the game
 case 'q':
+endwin();
 return 0;
 }
 endwin();
