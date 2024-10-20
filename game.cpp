@@ -263,6 +263,20 @@ void collectcoins(int playerX, int playerY, int& score, int& coinscollected )
     }
 }
 
+void collectkey(int playerX, int playerY)
+{
+    if(grid[playerX][playerY]->value == '.')
+    {
+        hasKey = true;
+        grid[playerX][playerY]->value = '-';
+    }
+}
+
+bool canenterdoor(int playerX, int playerY)
+{
+    return hasKey && grid[playerY][playerX]->value == ' ';
+}
+
 void printMaze(Player & player)
 {
 for( int i=0; i<rows; i++)
@@ -353,6 +367,8 @@ delete[] grid[i];
 delete[] grid;
 }
 };
+
+
 
 
 int main()
