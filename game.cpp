@@ -54,15 +54,16 @@ sNode* down;
 sNode(int x, int y): x(x) , y(y), down(nullptr)
 {}
 };
-sNode* top;
-int size; 
-int limit;
+sNode* top;  //representing the top of stack
+int size;  //size of stack
+int limit;   //limit after which stack cannot do undo 
 
 public:
+//constructor 
 Stack (int limit) : top (nullptr) , size(0), limit(limit) 
 {}
 
-void push (int x, int y)
+void push (int x, int y)   //push onto the stack
 {
 if (size < limit)
  {
@@ -73,12 +74,12 @@ if (size < limit)
  }
 }
 
-bool pop (int&x , int&y)
+bool pop (int&x , int&y)   //this is used to pop off the stack
 {
     if (top)
     {
         sNode*temp = top;
-        x = top->x;
+        x = top->x;       //the stack will pop causing the player to move back to the previous position 
         y = top-> y;
         top = top->down;
         delete temp;
@@ -88,12 +89,12 @@ bool pop (int&x , int&y)
     return false;
 }
 
-bool canUndo() const
+bool canUndo() const   //can only undo if size is greater than 0
 {
     return size > 0;
 }
 
-void undomove(Player & player)
+void undomove(Player & player)      //undo of movement condition 
 {
 int prevx, prevy;
 if(pop(prevx, prevy))
@@ -102,6 +103,8 @@ player.move(prevx , prevy);
 }
 }
 
+
+//destructor avoiding memeory leaks 
 ~Stack()
     {
         while(top)
@@ -226,6 +229,62 @@ if (rows > 0 && rows <rows-1 && colms > 0 && colms < colms -1 )
 }
 }
 }
+
+void printMaze(Player & player)
+{
+for( int i=0; i<rows; i++)
+{
+for(int j =0; j<colms; j++)
+{
+    if(i==player.getY() && j==player.getX())
+    {
+        mvaddch(i,j, 'P');
+    }
+    else 
+    {
+       switch(grid[i][j]->value)
+       {
+        case '#':
+        mvaddch(i,j, '#');
+        break;
+
+        case '.':
+        mvaddch(i,j, '.');
+        break;
+
+        case 'C':
+        mvaddch(i,j, 'C');
+        break;
+
+        case '-':
+        mvaddch(i,j, '-');
+        break;
+
+
+        case ' ':
+        mvaddch(i,j, ' ');
+        break;
+
+
+        case 'B':
+        mvaddch(i,j, 'B');
+        break;
+
+        default:
+        mvaddch(i,j, grid[i][j]->value);        
+        break;
+       } 
+    }
+}    
+}   
+refresh(); 
+}
+
+
+
+
+
+
 };
 
 
@@ -233,6 +292,8 @@ int main()
 {
 int rows =30;
 int colms =50;
+
+//setting up the basic ncurses library 
 initscr();
 noecho();
 cbreak();
@@ -243,12 +304,25 @@ Player player (1,1); //our player initialized with 1,1 position
 Maze maze (rows, colms);//maze initialized with rows and colms 
 Stack stack(10);   //stack with 10 undo moves initialized 
 
+maze.placeCoins();
+maze.placebombs();
+
 int ch; //switch case variable 
 int newX = player.getX();
 int newY = player.getY();
 int score = 0; // initial score is zero
 int coinscollected= 0;  //no coins collected 
 
+while (true)
+{
+clear();
+
+mvprintw(32, 0, "score: %d", score);
+mvprintw(33, 0, "coins collected: %d", coinscollected );
+
+
+
+//switch case for movement 
 ch = getch();
 switch (ch)
 {
@@ -278,6 +352,8 @@ case 'q':
 endwin(); // if you wanna exit press q 
 return 0;
 }
+
+}
 endwin(); // reached end of game condition 
-    return 0;
+return 0;
 }
