@@ -65,12 +65,12 @@ Stack (int limit) : top (nullptr) , size(0), limit(limit)
 void push (int x, int y)
 {
 if (size < limit)
-{
+ {
    sNode* newNode = new sNode(x, y);
    newNode->down = top;
    top = newNode;
    size++; 
-}
+ }
 }
 
 bool pop (int&x , int&y)
@@ -90,10 +90,10 @@ bool pop (int&x , int&y)
 
 bool canUndo() const
 {
-    return size > o;
+    return size > 0;
 }
 
-void undoMove(Player & player)
+void undomove(Player & player)
 {
 int prevx, prevy;
 if(pop(prevx, prevy))
@@ -102,8 +102,16 @@ player.move(prevx , prevy);
 }
 }
 
+~Stack()
+    {
+        while(top)
+        {
+        int x,y;
+        pop(x,y);
+        }
+    }
 
-}
+
 };
 
 
