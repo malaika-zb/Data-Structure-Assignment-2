@@ -50,12 +50,71 @@ class Stack{
 
 //this will print the maze 
 class Maze{
+private:
+Node***grid;  //making the grid
+int rows; //the no of rows in grid 
+int colms; //no of colms 
+int keyX; //key at position X
+int keyY; //key at position Y
+bool hasKey; //if the player has founf key
+int doorX;  //door at position x 
+int doorY;  //door at position Y 
 
+public:
+//constructor 
+Maze(int r, int c) : rows(r) , colms(c) , hasKey(false )
+{
+grid = new Node**[rows];
+for(int i=0; i < rows; i++)
+{
+grid[i]= new Node*[colms];
+for(int j=0; j<colms; j++)
+{
+char cellvalue = (i== 0 || i== rows -1 || j==0 || j ==colms -1 )? '#': '.';
+grid[i][j] = new Node(cellvalue);
+}
+}
+
+for(int i= 0; i< rows; i++)
+{
+for (int j=0; j< rows ; j++)
+{
+
+if (i>0)
+{
+    grid[i][j]->up = grid [i-1[j]];
+}
+
+if (i < rows-1)
+{
+grid[i][j]->down = grid [i-1][j];
+}
+
+if (j>0)
+{
+grid[i][j]->left = grid [i][j-1];
+}
+
+if (i < colms-1)
+{
+grid[i][j]->down = grid [i][j+1];
+}
+
+}
+}
+}
+
+
+}
+
+}
 };
 
 
 int main()
 {
+int rows =30;
+int colms =50;
 Player player (1,1); //our player initialized with 1,1 position 
 Maze maze (rows, colms);//maze initialized with rows and colms 
 Stack stack(10)   //stack with 10 undo moves initialized 
