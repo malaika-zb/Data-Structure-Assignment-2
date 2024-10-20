@@ -1,7 +1,9 @@
+//including the allowed libraries 
 #include<iostream>
 #include<ncurses.h>
 
 using namespace std;
+//node class for linking the grid with each other 
 
 class Node
 {
@@ -18,6 +20,7 @@ Node(char val): value(val), up(nullptr), down(nullptr), left(nullptr), right(nul
 {}
 };  
 
+//player class for the movement of player P
 class Player
 {
 private:
@@ -152,7 +155,7 @@ grid[i][j] = new Node(cellvalue);  //the desired value is printed
 
 for(int i= 0; i< rows; i++)
 {
-for (int j=0; j< rows ; j++)
+for (int j=0; j< colms ; j++)
 {
 //the grid is inter connected using the multi dim linked list 
 if (i>0) 
@@ -180,6 +183,8 @@ placekey();   // placing key
 placedoor();           //placing bombs 
 }
 
+
+//placing key at this position 
 void placekey()
 {
 keyX=5;
@@ -187,6 +192,7 @@ keyY=5;
 grid [keyY][keyX]->value = '-';  // i have made the key - in the maze
 }
 
+//the door is placed at the appropriate place within boundaries 
 void placedoor()
 {
 if(doorX > 0 && doorX < colms - 1 && doorY > 0 && doorY < rows - 1)
@@ -195,20 +201,23 @@ grid [doorY][doorX]->value = ' ';   // the door is not visible to the player
 }
 }
 
+//this will calculate the door sensing hint using the distance formula 
 void providedoorhint(Player & player )
 {
+    //player is initialized a position 
     int playerX = player.getX();
     int playerY = player.getY();
 
+//the use of distance formula 
     int distancetodoor = (playerX > doorX ? playerX-doorX: doorX-playerX) + (playerY>doorY? playerY-doorY: doorY-playerY);
     mvprintw(36,0, "distance to door: %d", distancetodoor); 
-    if (distancetodoor <=3)
+    if (distancetodoor <=3)  //setting up a threshold 
     {
-        mvprintw(37,0,"you are getting closer to the door");
+        mvprintw(37,0,"you are getting closer to the door");  //close 
     }
     else 
     {
-        mvprintw(37,0,"you are getting away from the door");
+        mvprintw(37,0,"you are getting away from the door"); //far away 
     } 
 }
 
@@ -221,7 +230,7 @@ void placeCoins()  // placing coins at these positions
 
 for (int i =0 ; i<10; i++)
 {
-  int row = coinpositions[i][1];
+  int row = coinpositions[i][1];  //making a loop as we cannot use rand 
   int col = coinpositions[i][0];
 
 if (row > 0 && row <rows-1 && col > 0 && col < colms-1 ) //placing coins randomly through loops 
@@ -252,36 +261,41 @@ if (row > 0 && row <rows-1 && col > 0 && col < colms-1 )
 }
 }
 
-bool bombencountered(int playerX, int playerY)
+bool bombencountered(int playerX, int playerY)   //if player encounters bomb game ends 
 {
-    return grid[playerX][playerY]->value == 'B';
+    return grid[playerY][playerX]->value == 'B';
 }
 
 
+//the player will collect coins to increase score 
 void collectcoins(int playerX, int playerY, int& score, int& coinscollected )
 {
     if(grid[playerY][playerX]->value == 'C')
     {
         grid[playerY][playerX]->value = '.';
-        score+=2;
+        score+=2;   //score increased by 2 
         coinscollected++;
     }
 }
 
+//the key is collected and placed at a location for player to find 
 void collectkey(int playerX, int playerY)
 {
-    if(grid[playerY][playerX]->value == '.')
+    if(grid[playerY][playerX]->value == '-')
     {
         hasKey = true;
-        grid[playerY][playerX]->value = '-';
+        grid[playerY][playerX]->value = '.';
     }
 }
 
+//this is the condition that door will only be opened if the player finds key 
 bool canenterdoor(int playerX, int playerY)
 {
-    return hasKey && grid[playerY][playerX]->value == ' ';
+    return hasKey && (playerX  == doorX && playerY  == doorY);
 }
 
+
+//this will print the maze onto the terminal 
 void printMaze(Player & player)
 {
 for( int i=0; i<rows; i++)
@@ -291,52 +305,52 @@ for(int j =0; j<colms; j++)
     if(i==player.getY() && j==player.getX())
     {   
         attron(A_BOLD | COLOR_PAIR(5));
-        mvaddch(i,j, 'P');
+        mvaddch(i,j, 'P');       //color for player 
         attroff(A_BOLD | COLOR_PAIR(5));
     }
     else 
     {
        switch(grid[i][j]->value)
        {
-        case '#':
+        case '#':  //for grid 
         attron(COLOR_PAIR(1));
         mvaddch(i,j, '#');
         attron(COLOR_PAIR(1));
         break;
 
-        case '.':
+        case '.':   //for empty spaces 
         attron(COLOR_PAIR(2));
         mvaddch(i,j, '.');
         attron(COLOR_PAIR(2));
         break;
 
-        case 'C':
+        case 'C':              //for coins 
         attron(COLOR_PAIR(3));
         mvaddch(i,j, 'C');
         attron(COLOR_PAIR(3));
         break;
 
-        case '-':
-        attron(COLOR_PAIR(4));
+        case '-':             //for key 
+        attron(COLOR_PAIR(2));
         mvaddch(i,j, '-');
-        attron(COLOR_PAIR(4));
+        attron(COLOR_PAIR(2));
         break;
 
 
-        case ' ':
+        case ' ':              //for door 
         attron(COLOR_PAIR(4));
         mvaddch(i,j, ' ');
         attron(COLOR_PAIR(4));
         break;
 
 
-        case 'B':
+        case 'B':        //for bombs 
         attron(COLOR_PAIR(4));
         mvaddch(i,j, 'B');
         attron(COLOR_PAIR(4));
         break;
 
-        default:
+        default:      //default setting 
         mvaddch(i,j, grid[i][j]->value);        
         break;
        } 
@@ -346,12 +360,14 @@ for(int j =0; j<colms; j++)
 refresh(); 
 }
 
+
+//this is the hint to find the key 
 void providekeyhint(Player& player)
 {
     int playerX = player.getX();
     int playerY = player.getY();
     int distancetokey = (playerX > keyX? playerX-keyX: keyX-playerX) + (playerY>keyY? playerY-keyY: keyY-playerY);
-    mvprintw(34,0, "distance to key: %d", distancetokey);
+    mvprintw(34,0, "distance to key: %d", distancetokey); //distance calculated using the distance formula 
     if(distancetokey<=3)
     {
         mvprintw(35,0,"you are getting closer to the key");
@@ -388,7 +404,7 @@ delete[] grid;
 };
 
 void setupColors()
-{
+{    //adding colors to the game 
 start_color();
 init_pair(1, COLOR_WHITE, COLOR_BLACK);
 init_pair(2, COLOR_GREEN, COLOR_BLACK);
@@ -417,7 +433,6 @@ Stack stack(10);   //stack with 10 undo moves initialized
 
 maze.placeCoins();
 maze.placebombs();
-
 int ch; //switch case variable 
 int newX = player.getX();
 int newY = player.getY();
@@ -428,15 +443,15 @@ while (true)
 {
 clear();
 maze.printMaze(player);
-mvprintw(32, 0, "score: %d", score);
-mvprintw(33, 0, "coins collected: %d", coinscollected );
+mvprintw(32, 0, "score: %d", score); //the final score 
+mvprintw(33, 0, "coins collected: %d", coinscollected );  //the no of coins collected 
 maze.providekeyhint(player);
 maze.providedoorhint(player);
 
 
 //switch case for movement 
 ch = getch();
-int newX = player.getX();
+int newX = player.getX();  
 int newY = player.getY();
 
 switch (ch)
@@ -459,8 +474,11 @@ break;
 
 //for undo move 
 case 'z':
-stack.undomove(player); //this will give you 10 undo moves so you can go to previous position 
-continue;
+if(stack.canUndo())
+{
+    stack.undomove(player);   //using z for undo moves 
+}
+break;
 
 //exit the game
 case 'q':
@@ -468,15 +486,20 @@ endwin(); // if you wanna exit press q
 return 0;
 }
 
-if(maze.ismovevelid(newX, newY))
+if(maze.ismovevelid(newX, newY))    //if the move is valid check 
 {
     stack.push(player.getX(), player.getY());
     player.move(newX, newY);
     maze.collectcoins(newX, newY, score, coinscollected);
     maze.collectkey(newX, newY);
+
+
+mvprintw(37, 0, "Checking position: (%d, %d)", newX, newY);
+refresh();  //checking position i used because a segmentation fault came 
+
     if (maze.bombencountered(newX, newY))
     {
-    mvprintw(38,0, "Game Over! you hit a bomb");
+    mvprintw(20,0, "Game Over! you hit a bomb");   //if it hits bomb this will be displayed 
     refresh();
     getch();
     endwin();
@@ -484,12 +507,13 @@ if(maze.ismovevelid(newX, newY))
     }
 if(maze.canenterdoor(newX, newY))
 {
-    mvprintw(38, 0, "you won");
+    mvprintw(20, 0, "you won");   //if you find door this will be displayed 
     refresh();
     getch();
-    endwin();
-    return 0;
+    break;
 }
+
+maze.collectcoins(player.getX() , player.getY(), score, coinscollected);   
 }
 }
 endwin(); // reached end of game condition 
