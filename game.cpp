@@ -103,43 +103,61 @@ if (i < colms-1)
 grid[i][j]->right = grid [i][j+1];   //for right 
 }
 }
-placekey();
-placedoor();
+}
+placekey();   // placing key
+placedoor();           //placing bombs 
 }
 
 void placekey()
 {
 keyX=5;
 keyY=5;
-grid [keyY][keyX]->value = '-';
+grid [keyY][keyX]->value = '-';  // i have made the key - in the maze
 }
 
 void placedoor()
 {
-grid [doorY][doorX]->value = ' ';
+grid [doorY][doorX]->value = ' ';   // the door is not visible to the player 
 }
 
-void placeCoins()
+void placeCoins()  // placing coins at these positions 
 {
+   int coinpositions[10][2] =
+{ 
     {3,3} , {5,7} , {12,12} , {15,10} , {25,20} , {8,5} , {18,3} , {20,15} , {28,8} , {10,10}
 };
 
-void placebombs ()
+for (int i =0 ; i<10; i++)
 {
-int bombposition[5][2] = {
-{4,6} , {7,15} , {16,12} , {22,8} , {28,18}
-};
-for (int i= 0; i<5; i++)
-{
-int rows = bombposition[i][1];
-int colms= bombsposition[i][0];
+  int rows = coinpositions[i][1];
+  int colms = coinpositions[i][0];
+
 if (rows > 0 && rows <rows-1 && colms > 0 && colms < colms -1 )
 {
-    grid[rows][colms]->value = 'B';
+    if (grid[rows][colms]->value == '.')
+     {
+        grid[rows][colms]->value == 'C';
+     }
 }
 }
 }
 
+void placebombs ()    //placing bombs at the following positions 
+{
+int bombposition[5][2] = 
+{
+{4,6} , {7,15} , {16,12} , {22,8} , {28,18}
+};
+
+for (int i= 0; i<5; i++)
+{
+int rows = bombposition[i][1];    //this will randomly place the bombs without using rand 
+int colms= bombposition[i][0];
+if (rows > 0 && rows <rows-1 && colms > 0 && colms < colms -1 )
+{
+    grid[rows][colms]->value = 'B';   //bombs are represented by B 
+}
+}
 }
 };
 
@@ -179,14 +197,14 @@ break;
 
 //for undo move 
 case 'z':
-stack.undomove(player);
+stack.undomove(player); //this will give you 10 undo moves so you can go to previous position 
 break;
 
 //exit the game
 case 'q':
-endwin();
+endwin(); // if you wanna exit press q 
 return 0;
 }
-endwin();
+endwin(); // reached end of game condition 
     return 0;
 }
