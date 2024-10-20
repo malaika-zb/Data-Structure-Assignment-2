@@ -59,8 +59,8 @@ int size;
 int limit;
 
 public:
-
-}
+Stack (int limit) : top (nullptr) , size(0), limit(limit) 
+{}
 
 };
 
