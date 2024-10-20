@@ -247,6 +247,10 @@ if (rows > 0 && rows <rows-1 && colms > 0 && colms < colms -1 )
 }
 }
 
+bool bombencountered(int playerX, int playerY)
+{
+    return grid[playerX][playerY]->value == 'B';
+}
 
 
 
