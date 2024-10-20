@@ -233,6 +233,12 @@ int main()
 {
 int rows =30;
 int colms =50;
+initscr();
+noecho();
+cbreak();
+keypad(stdscr , TRUE);
+curs_set(0);
+
 Player player (1,1); //our player initialized with 1,1 position 
 Maze maze (rows, colms);//maze initialized with rows and colms 
 Stack stack(10);   //stack with 10 undo moves initialized 
