@@ -57,8 +57,10 @@ class Maze{
 int main()
 {
 Player player (1,1); //our player initialized with 1,1 position 
+Maze maze (rows, colms);//maze initialized with rows and colms 
+Stack stack(10)   //stack with 10 undo moves initialized 
 
-int ch;
+int ch; //switch case variable 
 int newX = player.getX();
 int newY = player.getY();
 
