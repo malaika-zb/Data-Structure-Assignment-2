@@ -297,7 +297,21 @@ for(int j =0; j<colms; j++)
 refresh(); 
 }
 
-
+void providekeyhint(Player& player)
+{
+    int playerX = player.getX();
+    int playerY = player.getY();
+    int distancetokey = (playerX > keyX? playerX-keyX: keyX-playerX) + (playerY>keyY? playerY-keyY: keyY-playerY);
+    mvprintw(34,0, "distance to key: %d", distancetokey);
+    if(distancetokey<=3)
+    {
+        mvprintw(35,0,"you are getting closer to the key");
+    }
+    else
+    {
+        mvprintw(35,0,"you are getting further away from the key");
+    }
+}
 
 
 
