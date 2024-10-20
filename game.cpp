@@ -62,6 +62,48 @@ public:
 Stack (int limit) : top (nullptr) , size(0), limit(limit) 
 {}
 
+void push (int x, int y)
+{
+if (size < limit)
+{
+   sNode* newNode = new sNode(x, y);
+   newNode->down = top;
+   top = newNode;
+   size++; 
+}
+}
+
+bool pop (int&x , int&y)
+{
+    if (top)
+    {
+        sNode*temp = top;
+        x = top->x;
+        y = top-> y;
+        top = top->down;
+        delete temp;
+        size--;
+        return true;
+    }
+    return false;
+}
+
+bool canUndo() const
+{
+    return size > o;
+}
+
+void undoMove(Player & player)
+{
+int prevx, prevy;
+if(pop(prevx, prevy))
+{
+player.move(prevx , prevy);
+}
+}
+
+
+}
 };
 
 
