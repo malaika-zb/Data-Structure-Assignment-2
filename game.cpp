@@ -66,15 +66,15 @@ public:
 Maze(int r, int c) : rows(r) , colms(c) , hasKey(false )
 {
 grid = new Node**[rows];
-for(int i=0; i < rows; i++)
+for(int i=0; i < rows; i++)   //creating pointer grid showing rows
 {
 grid[i]= new Node*[colms];
-for(int j=0; j<colms; j++)
+for(int j=0; j<colms; j++)   //creating pointer grid showing colms 
 {
 
     // if true than # will be printed leaving other places with .
 char cellvalue = (i== 0 || i== rows -1 || j==0 || j ==colms -1 )? '#': '.';
-grid[i][j] = new Node(cellvalue);
+grid[i][j] = new Node(cellvalue);  //the desired value is printed 
 }
 }
 
@@ -85,7 +85,7 @@ for (int j=0; j< rows ; j++)
 //the grid is inter connected using the multi dim linked list 
 if (i>0) 
 {
-    grid[i][j]->up = grid [i-1[j]]; // for up 
+    grid[i][j]->up = grid [i-1][j]; // for up 
 }
 
 if (i < rows-1)
@@ -114,12 +114,15 @@ int rows =30;
 int colms =50;
 Player player (1,1); //our player initialized with 1,1 position 
 Maze maze (rows, colms);//maze initialized with rows and colms 
-Stack stack(10)   //stack with 10 undo moves initialized 
+Stack stack(10);   //stack with 10 undo moves initialized 
 
 int ch; //switch case variable 
 int newX = player.getX();
 int newY = player.getY();
+int score = 0; // initial score is zero
+int coinscollected= 0;  //no coins collected 
 
+ch = getch();
 switch (ch)
 {
 case 'w':
