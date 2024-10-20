@@ -103,6 +103,20 @@ if (i < colms-1)
 grid[i][j]->right = grid [i][j+1];   //for right 
 }
 }
+placekey();
+placedoor();
+}
+
+void placekey()
+{
+keyX=5;
+keyY=5;
+grid [keyY][keyX]->value = '-';
+}
+
+void placedoor()
+{
+grid [doorY][doorX]->value = ' ';
 }
 }
 };
