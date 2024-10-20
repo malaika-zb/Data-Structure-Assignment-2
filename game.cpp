@@ -253,7 +253,15 @@ bool bombencountered(int playerX, int playerY)
 }
 
 
-
+void collectcoins(int playerX, int playerY, int& score, int& coinscollected )
+{
+    if(grid[playerY][playerX]->value == 'C')
+    {
+        grid[playerY][playerX]->value = '.';
+        score+=2;
+        coinscollected++;
+    }
+}
 
 void printMaze(Player & player)
 {
