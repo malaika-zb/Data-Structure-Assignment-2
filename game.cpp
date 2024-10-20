@@ -190,6 +190,23 @@ void placedoor()
 grid [doorY][doorX]->value = ' ';   // the door is not visible to the player 
 }
 
+void providedoorhint(Player & player )
+{
+    int playerX = player.getX();
+    int playerY = player.getY();
+
+    int distancetodoor = (playerX > doorX ? playerX-doorX: doorX-playerX) + (playerY>doorY? playerY-doorY: doorY-playerY);
+    mvprintw(36,0, "distance to door: %d", distancetodoor); 
+    if (distancetodoor <=3)
+    {
+        mvprintw(37,0,"you are getting closer to the door");
+    }
+    else 
+    {
+        mvprintw(37,0,"you are getting away from the door");
+    } 
+}
+
 void placeCoins()  // placing coins at these positions 
 {
    int coinpositions[10][2] =  //coins will be used in scoring 
