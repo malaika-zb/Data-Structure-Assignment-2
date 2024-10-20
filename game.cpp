@@ -49,7 +49,8 @@ class Stack{
 
 
 //this will print the maze 
-class Maze{
+class Maze
+{
 private:
 Node***grid;  //making the grid
 int rows; //the no of rows in grid 
@@ -103,10 +104,6 @@ grid[i][j]->down = grid [i][j+1];
 }
 }
 }
-
-
-}
-
 }
 };
 
@@ -149,6 +146,6 @@ break;
 case 'q':
 return 0;
 }
-
+endwin();
     return 0;
 }
