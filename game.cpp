@@ -247,6 +247,10 @@ if (rows > 0 && rows <rows-1 && colms > 0 && colms < colms -1 )
 }
 }
 
+
+
+
+
 void printMaze(Player & player)
 {
 for( int i=0; i<rows; i++)
@@ -324,12 +328,18 @@ bool ismovevelid(int newX, int newY)
 }
 
 //destructor
- 
+~Maze()
+{ 
 for(int i=0; i<rows; i++)
 {
-
+for (int j=0; j<colms; j++)
+{
+    delete grid[i][j];
 }
-
+delete[] grid[i];
+}
+delete[] grid;
+}
 };
 
 
@@ -361,14 +371,18 @@ int coinscollected= 0;  //no coins collected
 while (true)
 {
 clear();
-
+maze.printMaze(player);
 mvprintw(32, 0, "score: %d", score);
 mvprintw(33, 0, "coins collected: %d", coinscollected );
-
+maze.providekeyhint(player);
+maze.providedoorhint(player);
 
 
 //switch case for movement 
 ch = getch();
+int newX = player.getX();
+int newY = player.getY();
+
 switch (ch)
 {
 case 'w':
@@ -396,6 +410,13 @@ break;
 case 'q':
 endwin(); // if you wanna exit press q 
 return 0;
+}
+
+if(maze.ismovevelid(newX, newY))
+{
+    stack.push(player.getX(), player.getY());
+    player.move(newX, newY);
+    
 }
 
 }
