@@ -118,6 +118,28 @@ void placedoor()
 {
 grid [doorY][doorX]->value = ' ';
 }
+
+void placeCoins()
+{
+    {3,3} , {5,7} , {12,12} , {15,10} , {25,20} , {8,5} , {18,3} , {20,15} , {28,8} , {10,10}
+};
+
+void placebombs ()
+{
+int bombposition[5][2] = {
+{4,6} , {7,15} , {16,12} , {22,8} , {28,18}
+};
+for (int i= 0; i<5; i++)
+{
+int rows = bombposition[i][1];
+int colms= bombsposition[i][0];
+if (rows > 0 && rows <rows-1 && colms > 0 && colms < colms -1 )
+{
+    grid[rows][colms]->value = 'B';
+}
+}
+}
+
 }
 };
 
