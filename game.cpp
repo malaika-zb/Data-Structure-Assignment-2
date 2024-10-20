@@ -1,8 +1,10 @@
 #include<iostream>
 #include<ncurses.h>
+
 using namespace std;
 
-class Node{
+class Node
+{
 public:
 //this will be the multidimensional linked list
 char value;
@@ -16,7 +18,8 @@ Node(char val): value(val), up(nullptr), down(nullptr), left(nullptr), right(nul
 {}
 };  
 
-class Player{
+class Player
+{
 private:
 //the x and y cooridates
 int x,y;
@@ -284,37 +287,51 @@ for( int i=0; i<rows; i++)
 for(int j =0; j<colms; j++)
 {
     if(i==player.getY() && j==player.getX())
-    {
+    {   
+        attron(A_BOLD | COLOR_PAIR(5));
         mvaddch(i,j, 'P');
+        attroff(A_BOLD | COLOR_PAIR(5));
     }
     else 
     {
        switch(grid[i][j]->value)
        {
         case '#':
+        attron(COLOR_PAIR(1));
         mvaddch(i,j, '#');
+        attron(COLOR_PAIR(1));
         break;
 
         case '.':
+        attron(COLOR_PAIR(2));
         mvaddch(i,j, '.');
+        attron(COLOR_PAIR(2));
         break;
 
         case 'C':
+        attron(COLOR_PAIR(3));
         mvaddch(i,j, 'C');
+        attron(COLOR_PAIR(3));
         break;
 
         case '-':
+        attron(COLOR_PAIR(4));
         mvaddch(i,j, '-');
+        attron(COLOR_PAIR(4));
         break;
 
 
         case ' ':
+        attron(COLOR_PAIR(4));
         mvaddch(i,j, ' ');
+        attron(COLOR_PAIR(4));
         break;
 
 
         case 'B':
+        attron(COLOR_PAIR(4));
         mvaddch(i,j, 'B');
+        attron(COLOR_PAIR(4));
         break;
 
         default:
@@ -368,7 +385,15 @@ delete[] grid;
 }
 };
 
-
+void setupColors()
+{
+start_color();
+init_pair(1, COLOR_WHITE, COLOR_BLACK);
+init_pair(2, COLOR_GREEN, COLOR_BLACK);
+init_pair(3, COLOR_YELLOW, COLOR_BLACK);
+init_pair(4, COLOR_RED, COLOR_BLACK);
+init_pair(5, COLOR_BLUE, COLOR_BLACK);
+}
 
 
 int main()
@@ -382,6 +407,7 @@ noecho();
 cbreak();
 keypad(stdscr , TRUE);
 curs_set(0);
+setupColors();
 
 Player player (1,1); //our player initialized with 1,1 position 
 Maze maze (rows, colms);//maze initialized with rows and colms 
@@ -444,9 +470,23 @@ if(maze.ismovevelid(newX, newY))
 {
     stack.push(player.getX(), player.getY());
     player.move(newX, newY);
-    
+    maze.collectcoins(newX, newY, score, coinscollected);
+    maze.collectkey(newX, newY);
+    if (maze.bombencountered(newX, newY))
+    {
+        mvprintw(38,0, "Game Over! you hit a bomb");
+    getch();
+    endwin();
+    return 0;
+    }
+if(maze.canenterdoor(newX, newY))
+{
+    mvprintw(38, 0, "you won");
+    getch();
+    endwin();
+    return 0;
 }
-
+}
 }
 endwin(); // reached end of game condition 
 return 0;
