@@ -23,9 +23,10 @@ class Player
 private:
 //the x and y cooridates
 int x,y;
+
 public:
 //making the constructor
-Player(int startingx, int startingy): x(startingx) , y(startingy)
+Player(int startx, int starty): x(startx) , y(starty)
 {}
 
 //for moving the player
@@ -57,6 +58,7 @@ sNode* down;
 sNode(int x, int y): x(x) , y(y), down(nullptr)
 {}
 };
+
 sNode* top;  //representing the top of stack
 int size;  //size of stack
 int limit;   //limit after which stack cannot do undo 
@@ -126,10 +128,8 @@ class Maze
 {
 private:
 Node***grid;  //making the grid
-int rows; //the no of rows in grid 
-int colms; //no of colms 
-int keyX; //key at position X
-int keyY; //key at position Y
+int rows, colms; //the no of rows and colms in grid 
+int keyX, keyY; //key at position X and Y
 bool hasKey; //if the player has founf key
 int doorX= 10;  //door at position x 
 int doorY =10;  //door at position Y 
@@ -144,7 +144,6 @@ for(int i=0; i < rows; i++)   //creating pointer grid showing rows
 grid[i]= new Node*[colms];
 for(int j=0; j<colms; j++)   //creating pointer grid showing colms 
 {
-
     // if true than # will be printed leaving other places with .
 char cellvalue = (i== 0 || i== rows -1 || j==0 || j ==colms -1 )? '#': '.';
 grid[i][j] = new Node(cellvalue);  //the desired value is printed 
@@ -163,7 +162,7 @@ if (i>0)
 
 if (i < rows-1)
 {
-grid[i][j]->down = grid [i-1][j]; //for down 
+grid[i][j]->down = grid [i+1][j]; //for down 
 }
 
 if (j>0)
@@ -190,7 +189,10 @@ grid [keyY][keyX]->value = '-';  // i have made the key - in the maze
 
 void placedoor()
 {
+if(doorX > 0 && doorX < colms - 1 && doorY > 0 && doorY < rows - 1)
+{
 grid [doorY][doorX]->value = ' ';   // the door is not visible to the player 
+}
 }
 
 void providedoorhint(Player & player )
@@ -219,14 +221,14 @@ void placeCoins()  // placing coins at these positions
 
 for (int i =0 ; i<10; i++)
 {
-  int rows = coinpositions[i][1];
-  int colms = coinpositions[i][0];
+  int row = coinpositions[i][1];
+  int col = coinpositions[i][0];
 
-if (rows > 0 && rows <rows-1 && colms > 0 && colms < colms -1 ) //placing coins randomly through loops 
+if (row > 0 && row <rows-1 && col > 0 && col < colms-1 ) //placing coins randomly through loops 
 {
-    if (grid[rows][colms]->value == '.')  
+    if (grid[row][col]->value == '.')  
      {
-        grid[rows][colms]->value == 'C';  //coins are represented by C 
+        grid[row][col]->value = 'C';  //coins are represented by C 
      }
 }
 }
@@ -241,11 +243,11 @@ int bombposition[5][2] =
 
 for (int i= 0; i<5; i++)
 {
-int rows = bombposition[i][1];    //this will randomly place the bombs without using rand 
-int colms= bombposition[i][0];
-if (rows > 0 && rows <rows-1 && colms > 0 && colms < colms -1 )
+int row = bombposition[i][1];    //this will randomly place the bombs without using rand 
+int col = bombposition[i][0];
+if (row > 0 && row <rows-1 && col > 0 && col < colms-1 )
 {
-    grid[rows][colms]->value = 'B';   //bombs are represented by B 
+    grid[row][col]->value = 'B';   //bombs are represented by B 
 }
 }
 }
@@ -268,10 +270,10 @@ void collectcoins(int playerX, int playerY, int& score, int& coinscollected )
 
 void collectkey(int playerX, int playerY)
 {
-    if(grid[playerX][playerY]->value == '.')
+    if(grid[playerY][playerX]->value == '.')
     {
         hasKey = true;
-        grid[playerX][playerY]->value = '-';
+        grid[playerY][playerX]->value = '-';
     }
 }
 
@@ -458,7 +460,7 @@ break;
 //for undo move 
 case 'z':
 stack.undomove(player); //this will give you 10 undo moves so you can go to previous position 
-break;
+continue;
 
 //exit the game
 case 'q':
@@ -474,7 +476,8 @@ if(maze.ismovevelid(newX, newY))
     maze.collectkey(newX, newY);
     if (maze.bombencountered(newX, newY))
     {
-        mvprintw(38,0, "Game Over! you hit a bomb");
+    mvprintw(38,0, "Game Over! you hit a bomb");
+    refresh();
     getch();
     endwin();
     return 0;
@@ -482,6 +485,7 @@ if(maze.ismovevelid(newX, newY))
 if(maze.canenterdoor(newX, newY))
 {
     mvprintw(38, 0, "you won");
+    refresh();
     getch();
     endwin();
     return 0;
